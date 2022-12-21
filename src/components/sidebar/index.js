@@ -1,21 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 import Logo from "../../assets/logo.svg";
 import {BiHomeAlt} from "react-icons/bi";
 import {MdOutlineCallToAction, MdOutlineMonetizationOn} from "react-icons/md";
 import {RiProductHuntLine} from "react-icons/ri"
 import {AiOutlineSetting} from "react-icons/ai"
+import {Link} from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar(props, {defaultActive}) {
+
+    const [activeIndex, ] = useState(defaultActive || 1);
 
     const menu = [
-        {name:"Home", icon:<BiHomeAlt/>},
-        {name:"Order", icon:<MdOutlineCallToAction/>},
-        {name:"Produk", icon:<RiProductHuntLine/>},
-        {name:"Keuangan", icon:<MdOutlineMonetizationOn/>},
-        {name:"Pengaturan", icon:<AiOutlineSetting/>}
+        {name:"Home", icon:<BiHomeAlt/>, route: "/"},
+        {name:"Order", icon:<MdOutlineCallToAction/>, route: "/order"},
+        {name:"Produk", icon:<RiProductHuntLine/>, route: "/product"},
+        {name:"Keuangan", icon:<MdOutlineMonetizationOn/>, route: "/money"},
+        {name:"Pengaturan", icon:<AiOutlineSetting/>, route: "/setting"}
     ]
 
-    return <div className="h-screen border-r border-gray-200 w-56 px-9 py-9 space-y-20">
+    return <div className="h-screen border-r border-gray-200 w-64 px-9 py-9 space-y-20">
         <div className="flex flex-row items-center">
             <img src={Logo} alt="react" className="w-9 h-9"/>
             <div>Pos Cafe</div>
@@ -27,10 +30,13 @@ export default function Sidebar() {
                     {
                         menu.map((val, index) => {
                             return (
-                                <li key={index} className="mb-7 flex flex-row items-center">
-                                    <div className="mr-5">{val.icon}</div>
-                                    <div>{val.name}</div>
-                                </li>
+                                <Link to={val.route}>
+                                    <li key={index} className="mb-7 flex flex-row items-center" active={index === activeIndex}>
+                                        <div className="mr-5">{val.icon}</div>
+                                        <div>{val.name}</div>
+                                    </li>
+                                </Link>
+
                             );
                         })
                     }
