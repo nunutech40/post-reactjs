@@ -60,20 +60,13 @@ function App() {
           }}>
               <div className="w-full">
                   <Routes>
-                      {/* auth path start */}
                       <Route path="login" element={<Login/>}/>
-                      {/* auth path end */}
+                      <Route path="/" element={<Home/>}/>
+                      <Route path="/order" element={<Order/>}/>
+                      <Route path="/product" element={<Product/>}/>
+                      <Route path="/money" element={<Money/>}/>
+                      <Route path="/setting" element={<Setting/>}/>
                   </Routes>
-                  <div className="w-full min-h-screen bg-white flex flex-row">
-                      <Sidebar/>
-                      <Routes>
-                          <Route path="/" element={<Home/>}/>
-                          <Route path="/order" element={<Order/>}/>
-                          <Route path="/product" element={<Product/>}/>
-                          <Route path="/money" element={<Money/>}/>
-                          <Route path="/setting" element={<Setting/>}/>
-                      </Routes>
-                  </div>
               </div>
           </AuthContext.Provider>
 
