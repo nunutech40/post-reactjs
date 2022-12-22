@@ -4,7 +4,7 @@ import axios from 'axios'
 import { AuthContext } from '../../App';
 import { Link } from 'react-router-dom';
 const qs = require('querystring')
-const api = 'http://localhost:8000'
+const api = 'http://localhost:8000/api'
 var Recaptcha = require('react-recaptcha');
 
 export default function Login(props) {
@@ -127,20 +127,22 @@ export default function Login(props) {
                                        <input
                                            type="email"
                                            className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                           id="exampleFormControlInput1"
+                                           id="idusername"
                                            placeholder="Username"
+                                           name="email"
                                            onChange={handleInputChange}
-                                           //value={dataform.email}
+                                           value={dataform.email}
                                        />
                                    </div>
                                    <div className="mb-4">
                                        <input
                                            type="password"
                                            className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                           id="exampleFormControlInput1"
+                                           id="idpassword"
                                            placeholder="Password"
+                                           name="password"
                                            onChange={handleInputChange}
-                                           //value={dataform.password}
+                                           value={dataform.password}
                                        />
                                    </div>
                                    <div className="text-center pt-1 mb-12 pb-1">
