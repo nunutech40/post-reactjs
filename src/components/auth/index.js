@@ -1,20 +1,28 @@
-import React, { Fragment, useContext, useState } from 'react'
+import React, {Fragment, useContext, useEffect, useState} from 'react'
 import Logo from "../../assets/logo.svg";
 import axios from 'axios'
 import { AuthContext } from '../../App';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const qs = require('querystring')
-const api = 'http://localhost:8000/api'
-var Recaptcha = require('react-recaptcha');
+const api = 'http://127.0.0.1:8000/api/';
+
 
 export default function Login(props) {
 
     const { dispatch } = useContext(AuthContext)
+    const history = useNavigate();
+
+    useEffect (() => {
+        if (localStorage.getItem('token')) {
+            history('/');
+        }
+    }, []);
+
+
 
     const initialState = {
         isSubmitting: false,
-        errorMessage: null,
-        isVerified: false
+        errorMessage: null
     }
 
     const stateForm = {
@@ -25,20 +33,6 @@ export default function Login(props) {
     const [data, setData] = useState(initialState)
     const [dataform, setDataForm] = useState(stateForm)
 
-    var callback = () => {
-        console.log('Done!!!!');
-
-    };
-    // specifying verify callback function
-    var verifyCallback = (response) => {
-        console.log(response);
-        if (response) {
-            setData({
-                ...data,
-                isVerified: true
-            })
-        }
-    };
 
     const handleInputChange = event => {
         setDataForm({
@@ -48,61 +42,56 @@ export default function Login(props) {
 
     }
     const handleFormSubmit = event => {
+        console.log("cek submit")
         event.preventDefault()
 
-        if (data.isVerified) {
-            setData({
-                ...data,
-                isSubmitting: true,
-                errorMessage: null
-            })
+        setData({
+            ...data,
+            isSubmitting: true,
+            errorMessage: null
+        })
 
-            const requestBody = {
-                email: dataform.email,
-                password: dataform.password
+        const config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
+        }
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+        const requestBody = {
+            email: dataform.email,
+            password: dataform.password
+        }
+
+        axios.post(api + "auth/login", requestBody, config)
+            .then(res => {
+                if (res.data.status === "success") {
+                    dispatch({
+                        type: "LOGIN",
+                        payload: res.data
+                    })
+                    history('/')
                 }
-            }
+                else if (res.data.status === "failed") {
+                    setData({
+                        ...data,
+                        isSubmitting: false,
+                        errorMessage: "Email anda belum terverifikasi, silahkan cek email!"
+                    })
+                }
+                else {
+                    console.log("cek success else")
+                    setData({
+                        ...data,
+                        isSubmitting: false,
+                        errorMessage: res.data.Message
+                    })
+                }
 
-            axios.post(api + '/auth/login', qs.stringify(requestBody), config)
-                .then(res => {
-                    if (res.data.success === true && res.data.isVerified === 1) {
-                        dispatch({
-                            type: "LOGIN",
-                            payload: res.data
-                        })
-
-                        //redirect ke dashboard
-                        props.history.push("/home")
-                    }
-                    else if (res.data.success === true && res.data.isVerified === 0) {
-                        setData({
-                            ...data,
-                            isSubmitting: false,
-                            errorMessage: "Email anda belum terverifikasi, silahkan cek email!"
-                        })
-                    }
-                    else {
-                        setData({
-                            ...data,
-                            isSubmitting: false,
-                            errorMessage: res.data.Message
-                        })
-                    }
-
-                    throw res
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        }
-        else {
-            alert('Anda diduga robot!')
-        }
+                throw res
+            })
+            .catch(e => {
+                console.log(e)
+            })
     }
 
     return (
@@ -148,7 +137,7 @@ export default function Login(props) {
                                    <div className="text-center pt-1 mb-12 pb-1">
                                        <button
                                            className="bg-emerald-600 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3"
-                                           type="button"
+                                           type="submit"
                                            data-mdb-ripple="true"
                                            data-mdb-ripple-color="light"
                                            disabled={data.isSubmitting}>

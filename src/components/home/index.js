@@ -1,13 +1,25 @@
 
-import React, {useContext } from 'react'
+import React, {useContext, useEffect} from 'react'
 import {BiSearch} from "react-icons/bi";
 import { AuthContext } from '../../App';
-import { Navigate } from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import Sidebar from "../sidebar";
+import Login from "../auth/index";
 
 export default function Home() {
-    const {state} = useContext(AuthContext)
+    const {state} = useContext(AuthContext);
 
+    useEffect (() => {
+        if (localStorage.getItem('token')) {
+            state.isAuthenticated = true
+        } else {
+            state.isAuthenticated = false
+        }
+    }, []);
+
+    if(!state.isAuthenticated){
+        return <Navigate to="/login" />
+    }
 
     return (
         <section className="w-full flex flex-wrap">

@@ -3,7 +3,7 @@ import Logo from "../../assets/logo.svg";
 import {BiHomeAlt} from "react-icons/bi";
 import {MdOutlineCallToAction, MdOutlineMonetizationOn} from "react-icons/md";
 import {RiProductHuntLine} from "react-icons/ri"
-import {AiOutlineSetting} from "react-icons/ai"
+import {AiOutlineSetting, AiOutlineLogout} from "react-icons/ai"
 import {Link} from "react-router-dom";
 
 export default function Sidebar(props, {defaultActive}) {
@@ -15,7 +15,8 @@ export default function Sidebar(props, {defaultActive}) {
         {name:"Order", icon:<MdOutlineCallToAction/>, route: "/order"},
         {name:"Produk", icon:<RiProductHuntLine/>, route: "/product"},
         {name:"Keuangan", icon:<MdOutlineMonetizationOn/>, route: "/money"},
-        {name:"Pengaturan", icon:<AiOutlineSetting/>, route: "/setting"}
+        {name:"Pengaturan", icon:<AiOutlineSetting/>, route: "/setting"},
+        {name:"Logout", icon:<AiOutlineLogout/>, route: "/logout"}
     ]
 
     return <div className="h-screen border-r border-gray-200 w-64 px-9 py-9 space-y-20">

@@ -1,6 +1,5 @@
 import './App.css';
 import React, { useReducer, createContext } from 'react';
-import Sidebar from "./components/sidebar";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Home from "./components/home";
 import Order from "./components/order"
@@ -17,22 +16,21 @@ const initialState = {
     isAuthenticated: false,
     token: null,
     tokenExpires: 0,
-    role: 0
+    role: "user"
 }
 
 const reducer = (state, action) => {
-    console.log("cek run reducer ")
-    console.log("cek state " + {state})
-    console.log("cek action " + {action})
+        console.log("cek action ")
+        console.log(action.type)
     switch(action.type) {
         case "LOGIN":
-            localStorage.setItem("token", JSON.stringify(action.payload.token))
+            localStorage.setItem("token", JSON.stringify(action.payload.data.data.access_token))
             return {
                 ...state,
                 isAuthenticated: true,
-                token: action.payload.token,
-                tokenExpires: action.payload.expires,
-                role: action.payload.role
+                token: localStorage.getItem("token"),
+                tokenExpires: 3600,
+                role: "admin"
             }
         case "LOGOUT":
             localStorage.clear()
@@ -50,18 +48,21 @@ const reducer = (state, action) => {
 function App() {
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    console.log("cek run app ")
+    console.log("cek run app  state")
     console.log(state.isAuthenticated)
+    console.log(state.role)
+    console.log(state.token)
+
   return (
-      <Router>
+      <Router forceRefresh={true}>
           <AuthContext.Provider value={{
               state,
               dispatch
           }}>
               <div className="w-full">
                   <Routes>
-                      <Route path="login" element={<Login/>}/>
                       <Route path="/" element={<Home/>}/>
+                      <Route path="login" element={<Login/>}/>
                       <Route path="/order" element={<Order/>}/>
                       <Route path="/product" element={<Product/>}/>
                       <Route path="/money" element={<Money/>}/>
